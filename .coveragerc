@@ -1,3 +1,3 @@
 [run]
 source = core
-omit = */migrations/*,*/tests/*
+omit = */migrations/*,*/tests/*,config/asgi.py,config/wsgi.py,manage.py,*urls.py

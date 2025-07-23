@@ -1,0 +1,34 @@
+# Archivos y directorios generados por Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+.env
+env/
+venv/
+.venv/
+pip-log.txt
+pip-delete-this-directory.txt
+.tox/
+.coverage
+.coverage.*
+.cache/
+.pytest_cache/
+htmlcov/  # <-- Ignorar el directorio del informe de cobertura
+build/
+dist/
+
+# Archivos específicos de Django
+*.sqlite3 # Ignorar la base de datos SQLite (si la usas localmente)
+media/    # Directorio para archivos subidos por usuarios (si lo configuras)
+staticfiles/ # Directorio para archivos estáticos recolectados (servidos en producción)
+
+# Archivos de configuración sensibles
+.env      # Archivo de variables de entorno con credenciales sensibles
+
+# IDEs y otros
+.idea/    # Directorios de PyCharm/IntelliJ
+.vscode/  # Directorios de VS Code
+*.swp     # Archivos de swap de Vim
+*.log

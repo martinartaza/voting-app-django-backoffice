@@ -1,0 +1,11 @@
+# ~/challenger/scores/django/.dockerignore
+.git
+.pytest_cache
+__pycache__
+*.pyc
+*.sqlite3
+.env
+venv
+.venv
+staticfiles
+media

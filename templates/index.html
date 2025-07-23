@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}Inicio - Sistema de Votación MVP{% endblock %}
+
+{% block body_class %}home-body{% endblock %}
+{% block container_class %}home-container{% endblock %}
+
+{% block content %}
+    <h1 class="base-heading home-heading">¡Bienvenido al Sistema de Votación MVP!</h1>
+    <p class="base-paragraph">
+        Esta es la página de inicio de nuestro sistema de votación, diseñado para que RRHH pueda gestionar concursos y votaciones internas.
+        Es parte de un proyecto MVP para mostrar habilidades en Django, FastAPI, Flutter y Terraform.
+    </p>
+    <p class="base-paragraph">
+        Explora el backoffice en el <a href="{% url 'admin:index' %}" class="base-link">panel de administración</a>.
+    </p>
+    <p class="base-paragraph">
+        Visita mi sitio web personal: <a href="https://www.sebastianartaza.com" target="_blank" class="base-link">www.sebastianartaza.com</a>
+    </p>
+{% endblock %}

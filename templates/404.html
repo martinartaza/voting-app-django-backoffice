@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}Página No Encontrada (404){% endblock %}
+
+{% block body_class %}error-body{% endblock %}
+{% block container_class %}error-container{% endblock %}
+
+{% block content %}
+    <h1 class="base-heading error-heading">¡Oops! Página No Encontrada (404)</h1>
+    <p class="base-paragraph">Lo sentimos, la página que estás buscando no existe.</p>
+    <p class="base-paragraph">
+        Por favor, revisa la URL o regresa a la <a href="/" class="base-link">página de inicio</a>.
+    </p>
+{% endblock %}
