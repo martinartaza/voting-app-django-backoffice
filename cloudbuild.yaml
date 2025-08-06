@@ -1,16 +1,16 @@
 steps:
   - name: 'gcr.io/cloud-builders/docker'
-    args: [ 'build', '-t', 'gcr.io/$PROJECT_ID/voting-app-backoffice', '.' ]
+    args: ['build', '-t', 'us-central1-docker.pkg.dev/$PROJECT_ID/django-repo/django:latest', '.']
 
   - name: 'gcr.io/cloud-builders/docker'
-    args: [ 'push', 'gcr.io/$PROJECT_ID/voting-app-backoffice' ]
+    args: ['push', 'us-central1-docker.pkg.dev/$PROJECT_ID/django-repo/django:latest']
 
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
     args:
       [
         'run', 'deploy', 'voting-app-backoffice',
-        '--image', 'gcr.io/$PROJECT_ID/voting-app-backoffice',
+        '--image', 'us-central1-docker.pkg.dev/$PROJECT_ID/django-repo/django:latest',
         '--region', 'us-central1',
         '--platform', 'managed',
         '--allow-unauthenticated',
