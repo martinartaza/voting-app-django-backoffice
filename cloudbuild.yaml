@@ -9,10 +9,13 @@ steps:
     entrypoint: gcloud
     args:
       [
-        'run', 'deploy', 'voting-app-backoffice',
+        'run', 'deploy', 'django-service',
         '--image', 'us-central1-docker.pkg.dev/$PROJECT_ID/django-repo/django:latest',
         '--region', 'us-central1',
         '--platform', 'managed',
         '--allow-unauthenticated',
         '--set-env-vars', 'DJANGO_SETTINGS_MODULE=config.settings'
       ]
+
+images:
+  - 'us-central1-docker.pkg.dev/$PROJECT_ID/django-repo/django:latest' 
