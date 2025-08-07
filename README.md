@@ -143,6 +143,3 @@ Github: https://github.com/martinartaza
 
 Sitio Web Personal: https://www.sebastianartaza.com https://n8n.sebastianartaza.com
 
-
-
-
