@@ -26,7 +26,7 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'your-insecure-default-key-for-dev')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 #DEBUG = os.getenv('DJANGO_DEBUG', 'True') == 'True'
-DEBUG = False
+DEBUG = True
 
 # Get custom domain from environment variable
 CUSTOM_DOMAIN = os.getenv('CUSTOM_DOMAIN', '')
