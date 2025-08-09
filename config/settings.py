@@ -28,7 +28,20 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'your-insecure-default-key-for-dev')
 #DEBUG = os.getenv('DJANGO_DEBUG', 'True') == 'True'
 DEBUG = False
 
-ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', '127.0.0.1,localhost').split(',')
+# Get custom domain from environment variable
+CUSTOM_DOMAIN = os.getenv('CUSTOM_DOMAIN', '')
+DEFAULT_ALLOWED_HOSTS = '127.0.0.1,localhost'
+
+# Add custom domain to allowed hosts if provided
+if CUSTOM_DOMAIN:
+    ALLOWED_HOSTS = [CUSTOM_DOMAIN] + DEFAULT_ALLOWED_HOSTS.split(',')
+else:
+    ALLOWED_HOSTS = DEFAULT_ALLOWED_HOSTS.split(',')
+
+# CSRF Trusted Origins for custom domain
+CSRF_TRUSTED_ORIGINS = []
+if CUSTOM_DOMAIN:
+    CSRF_TRUSTED_ORIGINS.append(f'https://{CUSTOM_DOMAIN}')
 
 # Application definition
 
