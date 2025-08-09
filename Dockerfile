@@ -12,5 +12,8 @@ RUN chmod +x entrypoint.sh
 
 EXPOSE 8080
 
+# Set environment variable for port
+ENV PORT=8080
+
 # Use the entrypoint script instead of direct gunicorn
 CMD ["./entrypoint.sh"]
