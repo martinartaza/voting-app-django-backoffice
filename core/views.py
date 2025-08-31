@@ -8,6 +8,8 @@ from .models import EmailVerification
 from django.utils import timezone
 from allauth.account.models import EmailAddress
 from allauth.account.utils import perform_login
+from django.shortcuts import redirect
+from django.urls import reverse
 import uuid
 
 
@@ -51,3 +53,21 @@ def register_user(request):
     
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
+def custom_github_login(request):
+    """
+    Redirige a la URL de login de GitHub con el parámetro 'state'.
+    """
+    state_param = request.GET.get('state', '')
+    #print(f"🔗 CustomGitHubLogin - State recibido: {state_param}")
+    
+    if state_param:
+        request.session['custom_oauth_state'] = state_param
+        #print(f"💾 CustomGitHubLogin - State guardado en sesión: {state_param}")
+    
+    # Construye la URL de login de allauth (sin state, para que allauth genere el suyo)
+    url = reverse('github_login')
+    url += '?process=login'
+    
+    #print(f"🔗 CustomGitHubLogin - URL final: {url}")
+    return redirect(url)
