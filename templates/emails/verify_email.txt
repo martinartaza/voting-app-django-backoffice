@@ -1,0 +1,16 @@
+Sistema de Votación - Verifica tu Email
+
+¡Hola {{ user.first_name|default:user.username }}!
+
+Gracias por registrarte en nuestro sistema de votación. Para completar tu registro, necesitas verificar tu dirección de email.
+
+Para verificar tu email, visita este enlace:
+{{ verification_url }}
+
+Importante: Este enlace expira en {{ expires_in }} por seguridad.
+
+Si no solicitaste este registro, puedes ignorar este email.
+
+---
+Este es un email automático, por favor no respondas a este mensaje.
+© 2024 Sistema de Votación. Todos los derechos reservados.

@@ -1,5 +1,6 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser # Importa AbstractUser
+from django.contrib.auth.models import AbstractUser
+from .managers import CompetitionManager, VoteManager, UserManager
 
 class UserRole(models.TextChoices):
     ADMIN = 'ADMIN', 'Administrador'
@@ -33,12 +34,20 @@ class CustomUser(AbstractUser):
         verbose_name="Empresa"
     )
 
+    objects = UserManager()
+
     class Meta:
         verbose_name = "Usuario Personalizado"
         verbose_name_plural = "Usuarios Personalizados"
 
     def __str__(self):
         return self.username
+
+    def can_access_company(self, company):
+        """Verifica si el usuario puede acceder a una compañía específica"""
+        if self.is_superuser or self.role == 'ADMIN':
+            return True
+        return self.company == company
 
 
 class Competition(models.Model):
@@ -58,6 +67,8 @@ class Competition(models.Model):
         verbose_name="Creador"
     )
 
+
+    objects = CompetitionManager()
 
     def __str__(self):
         return self.name
@@ -111,6 +122,7 @@ class Vote(models.Model):
         null=True
     )
 
+    objects = VoteManager()
 
     def __str__(self):
         return f"{self.title} ({self.competition.name})"
@@ -118,3 +130,24 @@ class Vote(models.Model):
     class Meta:
         verbose_name = "Vote"
         verbose_name_plural = "Votes"
+
+    @property
+    def company(self):
+        """Obtiene la compañía a través de la competencia y su creador"""
+        return self.competition.creator.company
+
+
+class EmailVerification(models.Model):
+    """Modelo para verificación de email"""
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+    token = models.CharField(max_length=100, unique=True)
+    is_verified = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    expires_at = models.DateTimeField()
+
+    def __str__(self):
+        return f"Verification for {self.user.email}"
+
+    def is_expired(self):
+        from django.utils import timezone
+        return timezone.now() > self.expires_at

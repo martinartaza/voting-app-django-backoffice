@@ -1,20 +1,25 @@
 import pytest
-from datetime import date
-from core.models import Competition, Vote
+from unittest.mock import MagicMock
 
 @pytest.fixture
-def sample_competition(db):
-    return Competition.objects.create(
-        name="Best Colleague 2024",
-        start_date=date(2024,1,1),
-        end_date=date(2024,12,31)
-    )
+def mock_user():
+    """Mock user for testing"""
+    user = MagicMock()
+    user.id = 1
+    user.username = 'testuser'
+    user.email = 'test@example.com'
+    user.first_name = 'Test'
+    user.last_name = 'User'
+    user.role = 'COMMON_USER'
+    user.company = None
+    user.is_active = True
+    return user
 
 @pytest.fixture
-def sample_vote(db, sample_competition):
-    return Vote.objects.create(
-        competition=sample_competition,
-        title="Most Helpful",
-        description="Vote for the most helpful colleague",
-        is_public=True
-    )
+def mock_verification():
+    """Mock email verification for testing"""
+    verification = MagicMock()
+    verification.token = 'test-token-123'
+    verification.is_expired.return_value = False
+    verification.is_verified = False
+    return verification
