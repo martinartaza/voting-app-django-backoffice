@@ -26,9 +26,9 @@ urlpatterns = [
         permission_classes=[permissions.IsAuthenticated]
     ), name='profile'),
     
-    # Solo mantener el registro personalizado (porque crea compañía)
-    path('api/register/', views.register_user, name='register'),
-    
     # GitHub OAuth personalizado con manejo de state
     path('social/github/login/', views.custom_github_login, name='custom_github_login'),
+    
+    # Obtener tokens JWT
+    path('api/tokens/', views.create_tokens, name='create_tokens'),
 ] 

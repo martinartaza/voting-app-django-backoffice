@@ -84,7 +84,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'allauth.account.middleware.AccountMiddleware',
-    'core.middleware.OAuthStateMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -264,7 +263,7 @@ ACCOUNT_RATE_LIMITS = {
 # Social Account settings
 SOCIALACCOUNT_AUTO_SIGNUP = True
 SOCIALACCOUNT_EMAIL_REQUIRED = True
-SOCIALACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+SOCIALACCOUNT_EMAIL_VERIFICATION = 'none'  # Cambiado de 'mandatory' a 'none' para social login
 SOCIALACCOUNT_PROVIDERS = {
     'github': {
         'APP': {
@@ -278,6 +277,10 @@ SOCIALACCOUNT_PROVIDERS = {
         ],
     }
 }
+
+# Configuración adicional para social login
+SOCIALACCOUNT_ADAPTER = 'core.adapters.CustomSocialAccountAdapter'
+ACCOUNT_ADAPTER = 'core.adapters.CustomAccountAdapter'
 
 # Site configuration
 SITE_ID = 1

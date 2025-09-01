@@ -31,6 +31,41 @@
                 <p class="base-paragraph">
                     <strong>Rol:</strong> {{ user.get_role_display }}
                 </p>
+                
+                <!-- Sección de Tokens JWT -->
+                <div class="tokens-section">
+                    <h4>🔑 Tokens JWT para API</h4>
+                    <p class="base-paragraph">
+                        Usa estos tokens para autenticarte en la API desde otras aplicaciones:
+                    </p>
+                    
+                    <div class="token-container">
+                        <label><strong>Access Token:</strong></label>
+                        <div class="token-input-container">
+                            <input type="text" id="access-token" readonly class="token-input">
+                            <button onclick="copyToClipboard('access-token')" class="copy-btn">📋</button>
+                        </div>
+                    </div>
+                    
+                    <div class="token-container">
+                        <label><strong>Refresh Token:</strong></label>
+                        <div class="token-input-container">
+                            <input type="text" id="refresh-token" readonly class="token-input">
+                            <button onclick="copyToClipboard('refresh-token')" class="copy-btn">📋</button>
+                        </div>
+                    </div>
+                    
+                    <div class="api-example">
+                        <h5>📡 Ejemplo de uso en API:</h5>
+                        <div class="code-example">
+                            <code>
+                                curl -H "Authorization: Bearer <span id="token-example">TU_TOKEN</span>" \
+                                http://localhost:8000/api/profile/
+                            </code>
+                        </div>
+                    </div>
+                </div>
+                
                 <a href="{% url 'account_logout' %}" class="logout-btn">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M16.56 5.44l-1.45 1.45L17.64 8H8v2h9.64l-2.53 2.11 1.45 1.45L21 9l-4.44-3.56zM4 12a1 1 0 0 1 1-1h7V9H5c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h6v-2H5V12z"/>
@@ -83,6 +118,44 @@
     </p>
     
     <script>
+        // Función para copiar al portapapeles
+        function copyToClipboard(elementId) {
+            const element = document.getElementById(elementId);
+            element.select();
+            element.setSelectionRange(0, 99999);
+            
+            try {
+                document.execCommand('copy');
+                const button = element.nextElementSibling;
+                const originalText = button.textContent;
+                button.textContent = '✅';
+                setTimeout(() => {
+                    button.textContent = originalText;
+                }, 2000);
+            } catch (err) {
+                console.error('Error al copiar:', err);
+            }
+        }
+
+        // Cargar tokens si el usuario está logueado
+        {% if user.is_authenticated %}
+        document.addEventListener('DOMContentLoaded', function() {
+            // Cargar tokens JWT
+            fetch('/api/tokens/')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.access_token) {
+                        document.getElementById('access-token').value = data.access_token;
+                        document.getElementById('refresh-token').value = data.refresh_token;
+                        document.getElementById('token-example').textContent = data.access_token.substring(0, 20) + '...';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error cargando tokens:', error);
+                });
+        });
+        {% endif %}
+
         // Solo ejecutar si el usuario no está logueado
         {% if not user.is_authenticated %}
         document.addEventListener('DOMContentLoaded', function() {
