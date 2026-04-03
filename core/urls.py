@@ -29,6 +29,9 @@ urlpatterns = [
     # GitHub OAuth personalizado con manejo de state
     path('social/github/login/', views.custom_github_login, name='custom_github_login'),
     
+    # Obtener UUID de la empresa
+    path('api/company/uuid/', views.get_company_uuid, name='get_company_uuid'),
+    
     # Obtener tokens JWT
-    path('api/tokens/', views.create_tokens, name='create_tokens'),
+    path('api/tokens/', views.create_tokens, name='get_tokens'),
 ] 

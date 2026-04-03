@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from .managers import CompetitionManager, VoteManager, UserManager
+import uuid
 
 class UserRole(models.TextChoices):
     ADMIN = 'ADMIN', 'Administrador'
@@ -9,6 +10,7 @@ class UserRole(models.TextChoices):
 
 class Company(models.Model):
     name = models.CharField(max_length=255, unique=True, verbose_name="Nombre de la Empresa")
+    uuid = models.UUIDField(default=uuid.uuid4, unique=True, editable=False, verbose_name="UUID único")
     # Puedes añadir más campos aquí si lo necesitas, como dirección, etc.
 
     class Meta:

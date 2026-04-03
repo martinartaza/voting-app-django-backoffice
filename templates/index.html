@@ -144,10 +144,11 @@
             fetch('/api/tokens/')
                 .then(response => response.json())
                 .then(data => {
-                    if (data.access_token) {
-                        document.getElementById('access-token').value = data.access_token;
-                        document.getElementById('refresh-token').value = data.refresh_token;
-                        document.getElementById('token-example').textContent = data.access_token.substring(0, 20) + '...';
+                    console.log('Datos recibidos:', data);
+                    if (data.access) {
+                        document.getElementById('access-token').value = data.access;
+                        document.getElementById('refresh-token').value = data.refresh;
+                        document.getElementById('token-example').textContent = data.access.substring(0, 20) + '...';
                     }
                 })
                 .catch(error => {

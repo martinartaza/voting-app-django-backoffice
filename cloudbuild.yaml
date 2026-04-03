@@ -1,17 +1,45 @@
+# ========================================
+# CLOUD BUILD CONFIGURATION FOR BITBUCKET
+# ========================================
+# This cloudbuild.yaml is configured for deployment to Google Cloud Run
+# from a Bitbucket private repository.
+#
+# IMPORTANT: After pushing to Bitbucket, update the following in your Terraform project:
+# 1. Update the repository URL in the git clone step below
+# 2. Configure Bitbucket credentials in Google Cloud Secret Manager
+# 3. Update the Cloud Build trigger to point to your Bitbucket repository
+#
+# See: https://cloud.google.com/build/docs/automating-builds/bitbucket/connect-repo-bitbucket
+# ========================================
+
 steps:
-  # Clone the Django repository from GitHub
+  # Step 1: Clone the Django repository from Bitbucket
+  # TODO: Replace with your Bitbucket repository URL after pushing
+  # Format: https://bitbucket.org/<workspace>/<repo-name>.git
   - name: 'gcr.io/cloud-builders/git'
-    args: ['clone', 'https://github.com/martinartaza/voting-app-django-backoffice.git', 'django-app']
+    args: 
+      - 'clone'
+      - 'https://bitbucket.org/YOUR_WORKSPACE/voting-django-backoffice.git'  # ← CHANGE THIS
+      - 'django-app'
+    # If private repo, you'll need to set up credentials:
+    # secretEnv: ['BITBUCKET_USERNAME', 'BITBUCKET_APP_PASSWORD']
     
-  # Build the Docker image from the cloned repository
+  # Step 2: Build the Docker image from the cloned repository
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'us-central1-docker.pkg.dev/$PROJECT_ID/django-repo/django:latest', './django-app']
+    args: 
+      - 'build'
+      - '-t'
+      - 'us-central1-docker.pkg.dev/$PROJECT_ID/django-repo/django:latest'
+      - './django-app'
 
-  # Push the image to Container Registry
+  # Step 3: Push the image to Artifact Registry
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'us-central1-docker.pkg.dev/$PROJECT_ID/django-repo/django:latest']
+    args: 
+      - 'push'
+      - 'us-central1-docker.pkg.dev/$PROJECT_ID/django-repo/django:latest'
 
-  # Deploy to Cloud Run (only update image, keep existing env vars from Terraform)
+  # Step 4: Deploy to Cloud Run
+  # This will only update the image, keeping existing environment variables from Terraform
   - name: 'gcr.io/cloud-builders/gcloud'
     args:
       - 'run'
@@ -22,8 +50,18 @@ steps:
       - '--platform=managed'
       - '--port=8080'
 
+# Images to be pushed to Artifact Registry
 images:
   - 'us-central1-docker.pkg.dev/$PROJECT_ID/django-repo/django:latest'
 
+# Build options
 options:
-  logging: CLOUD_LOGGING_ONLY 
+  logging: CLOUD_LOGGING_ONLY
+
+# Uncomment if using Secret Manager for Bitbucket credentials:
+# availableSecrets:
+#   secretManager:
+#   - versionName: projects/$PROJECT_ID/secrets/bitbucket-username/versions/latest
+#     env: 'BITBUCKET_USERNAME'
+#   - versionName: projects/$PROJECT_ID/secrets/bitbucket-app-password/versions/latest
+#     env: 'BITBUCKET_APP_PASSWORD' 

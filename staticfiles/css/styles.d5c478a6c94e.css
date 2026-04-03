@@ -1,0 +1,150 @@
+.base-body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    text-align: center;
+}
+
+.base-container {
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    width: 90%;
+}
+
+.base-heading {
+    margin-bottom: 20px;
+}
+
+.base-paragraph {
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.base-link {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.base-link:hover {
+    text-decoration: underline;
+}
+
+.home-body {
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+.home-container {
+    background-color: #fff;
+}
+
+.home-heading {
+    color: #4CAF50;
+}
+
+.error-body {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.error-container {
+    background-color: #fcecec;
+    border: 1px solid #f5c6cb;
+}
+
+.error-heading {
+    color: #dc3545;
+}
+
+/* API Section Styles */
+.api-section {
+    margin: 30px 0;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    border-left: 4px solid #007bff;
+}
+
+.endpoint-list {
+    text-align: left;
+}
+
+.endpoint {
+    margin: 15px 0;
+    padding: 15px;
+    background-color: #fff;
+    border-radius: 6px;
+    border: 1px solid #e9ecef;
+}
+
+.endpoint code {
+    background-color: #e9ecef;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-family: 'Courier New', monospace;
+    color: #495057;
+}
+
+.endpoint p {
+    margin: 8px 0 0 0;
+    color: #6c757d;
+    font-size: 14px;
+}
+
+/* Test Section Styles */
+.test-section {
+    margin: 30px 0;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    border-left: 4px solid #28a745;
+}
+
+.github-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background-color: #24292e;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.github-btn:hover {
+    background-color: #1b1f23;
+}
+
+.github-btn:disabled {
+    background-color: #6a737d;
+    cursor: not-allowed;
+}
+
+.result-box {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 6px;
+    background-color: #fff;
+    border: 1px solid #e9ecef;
+}
+
+.result-box h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+}
+
+.result-box p {
+    margin: 8px 0;
+    line-height: 1.5;
+}

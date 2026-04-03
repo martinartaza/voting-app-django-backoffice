@@ -25,23 +25,36 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'your-insecure-default-key-for-dev')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-#DEBUG = os.getenv('DJANGO_DEBUG', 'True') == 'True'
-DEBUG = True
+DEBUG = os.getenv('DJANGO_DEBUG', 'True') == 'True'
 
 # Get custom domain from environment variable
 CUSTOM_DOMAIN = os.getenv('CUSTOM_DOMAIN', '')
 DEFAULT_ALLOWED_HOSTS = '127.0.0.1,localhost'
 
-# Add custom domain to allowed hosts if provided
-if CUSTOM_DOMAIN:
-    ALLOWED_HOSTS = [CUSTOM_DOMAIN] + DEFAULT_ALLOWED_HOSTS.split(',')
-else:
-    ALLOWED_HOSTS = DEFAULT_ALLOWED_HOSTS.split(',')
+# Build ALLOWED_HOSTS
+allowed_hosts_list = DEFAULT_ALLOWED_HOSTS.split(',')
 
-# CSRF Trusted Origins for custom domain
+# Add custom domain if provided
+if CUSTOM_DOMAIN:
+    allowed_hosts_list.append(CUSTOM_DOMAIN)
+
+# Add Cloud Run domains (*.run.app)
+allowed_hosts_list.extend([
+    '.run.app',  # All Cloud Run domains
+    '.a.run.app',  # Cloud Run internal domains
+])
+
+ALLOWED_HOSTS = allowed_hosts_list
+
+# CSRF Trusted Origins for custom domain and Cloud Run
 CSRF_TRUSTED_ORIGINS = []
 if CUSTOM_DOMAIN:
     CSRF_TRUSTED_ORIGINS.append(f'https://{CUSTOM_DOMAIN}')
+
+# Add Cloud Run CSRF trusted origins
+cloud_run_url = os.getenv('CLOUD_RUN_SERVICE_URL', '')
+if cloud_run_url:
+    CSRF_TRUSTED_ORIGINS.append(cloud_run_url)
 
 # Application definition
 
@@ -170,15 +183,16 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # REST Framework Configuration
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ),
-    'DEFAULT_PERMISSION_CLASSES': (
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',  # Primero sesión
+        'rest_framework_simplejwt.authentication.JWTAuthentication',  # Luego JWT
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
-    ),
-    'DEFAULT_RENDERER_CLASSES': (
+    ],
+    'DEFAULT_RENDERER_CLASSES': [
         'rest_framework.renderers.JSONRenderer',
-    ),
+    ],
 }
 
 # JWT Settings
@@ -208,16 +222,6 @@ SIMPLE_JWT = {
     'SLIDING_TOKEN_REFRESH_EXP_CLAIM': 'refresh_exp',
     'SLIDING_TOKEN_LIFETIME': timedelta(minutes=5),
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
-}
-
-# DRF Authentication
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ],
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',
-    ],
 }
 
 # CORS Settings

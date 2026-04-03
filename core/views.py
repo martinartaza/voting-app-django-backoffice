@@ -41,15 +41,45 @@ def custom_github_login(request):
     return redirect(url)
 
 
-@api_view(['POST'])
+@api_view(['GET'])
 @permission_classes([IsAuthenticated])
+def get_company_uuid(request):
+    """
+    Obtiene el UUID de la empresa del usuario autenticado
+    """
+    user = request.user
+    
+    if not user.company:
+        return JsonResponse({'error': 'Usuario no pertenece a ninguna empresa'}, status=404)
+    
+    return JsonResponse({
+        'company_uuid': user.company.id,
+        'company_name': user.company.name
+    })
+
+
+@api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated])  # Restaurar autenticación
 def create_tokens(request):
     """
     Crea tokens JWT para el usuario autenticado
     """
+    print("/n/n/n Paso por aqui /n/n/n", flush=True)
+    
     user = request.user
     refresh = RefreshToken.for_user(user)
-    
+    json = {
+        'refresh': str(refresh),
+        'access': str(refresh.access_token),
+        'user': {
+            'id': user.id,
+            'username': user.username,
+            'email': user.email,
+            'role': user.role,
+            'company': user.company.name if user.company else None,
+        }
+    }
+    print(json)
     return JsonResponse({
         'refresh': str(refresh),
         'access': str(refresh.access_token),
